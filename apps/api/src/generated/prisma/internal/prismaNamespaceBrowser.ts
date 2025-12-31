@@ -54,7 +54,12 @@ export const ModelName = {
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  List: 'List',
+  ListMember: 'ListMember',
+  ListInvite: 'ListInvite',
+  ListItem: 'ListItem',
+  ItemEvent: 'ItemEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -131,12 +136,100 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
+export const ListScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  status: 'status',
+  currency: 'currency',
+  country: 'country',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type ListScalarFieldEnum = (typeof ListScalarFieldEnum)[keyof typeof ListScalarFieldEnum]
+
+
+export const ListMemberScalarFieldEnum = {
+  id: 'id',
+  listId: 'listId',
+  userId: 'userId',
+  role: 'role',
+  joinedAt: 'joinedAt',
+  invitedByUserId: 'invitedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ListMemberScalarFieldEnum = (typeof ListMemberScalarFieldEnum)[keyof typeof ListMemberScalarFieldEnum]
+
+
+export const ListInviteScalarFieldEnum = {
+  id: 'id',
+  listId: 'listId',
+  tokenHash: 'tokenHash',
+  roleGranted: 'roleGranted',
+  createdByUserId: 'createdByUserId',
+  expiresAt: 'expiresAt',
+  maxUses: 'maxUses',
+  uses: 'uses',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ListInviteScalarFieldEnum = (typeof ListInviteScalarFieldEnum)[keyof typeof ListInviteScalarFieldEnum]
+
+
+export const ListItemScalarFieldEnum = {
+  id: 'id',
+  listId: 'listId',
+  name: 'name',
+  nameNormalized: 'nameNormalized',
+  note: 'note',
+  quantity: 'quantity',
+  unit: 'unit',
+  status: 'status',
+  sortOrder: 'sortOrder',
+  expectedPriceAmount: 'expectedPriceAmount',
+  expectedPriceCurrency: 'expectedPriceCurrency',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ListItemScalarFieldEnum = (typeof ListItemScalarFieldEnum)[keyof typeof ListItemScalarFieldEnum]
+
+
+export const ItemEventScalarFieldEnum = {
+  id: 'id',
+  listId: 'listId',
+  itemId: 'itemId',
+  type: 'type',
+  payload: 'payload',
+  actorUserId: 'actorUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ItemEventScalarFieldEnum = (typeof ItemEventScalarFieldEnum)[keyof typeof ItemEventScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -153,4 +246,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

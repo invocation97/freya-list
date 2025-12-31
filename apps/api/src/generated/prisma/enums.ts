@@ -9,7 +9,53 @@
 * 🟢 You can import this file directly.
 */
 
+export const ListStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ListStatus = (typeof ListStatus)[keyof typeof ListStatus]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const ListMemberRole = {
+  OWNER: 'OWNER',
+  EDITOR: 'EDITOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type ListMemberRole = (typeof ListMemberRole)[keyof typeof ListMemberRole]
+
+
+export const ListItemUnit = {
+  PCS: 'PCS',
+  KG: 'KG',
+  L: 'L',
+  ML: 'ML',
+  G: 'G',
+  MG: 'MG'
+} as const
+
+export type ListItemUnit = (typeof ListItemUnit)[keyof typeof ListItemUnit]
+
+
+export const ListItemStatus = {
+  PENDING: 'PENDING',
+  BOUGHT: 'BOUGHT',
+  PARTIALLY_BOUGHT: 'PARTIALLY_BOUGHT',
+  UNAVAILABLE: 'UNAVAILABLE'
+} as const
+
+export type ListItemStatus = (typeof ListItemStatus)[keyof typeof ListItemStatus]
+
+
+export const ItemEventType = {
+  ITEM_ADDED: 'ITEM_ADDED',
+  ITEM_UPDATED: 'ITEM_UPDATED',
+  ITEM_STATUS_CHANGED: 'ITEM_STATUS_CHANGED',
+  ITEM_PRICE_EXPECTED_SET: 'ITEM_PRICE_EXPECTED_SET',
+  ITEM_PRICE_ACTUAL_SET: 'ITEM_PRICE_ACTUAL_SET',
+  ITEM_REMOVED: 'ITEM_REMOVED'
+} as const
+
+export type ItemEventType = (typeof ItemEventType)[keyof typeof ItemEventType]

@@ -15,15 +15,22 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  id               String       @id
+  name             String
+  email            String
+  emailVerified    Boolean      @default(false)
+  image            String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  sessions         Session[]
+  accounts         Account[]
+  lists            List[]
+  listMembers      ListMember[]
+  invitedMembers   ListMember[] @relation("Inviter")
+  listInvites      ListInvite[]
+  createdListItems ListItem[]   @relation("ListItemCreator")
+  updatedListItems ListItem[]   @relation("ListItemUpdater")
+  itemEvents       ItemEvent[]
 
   @@unique([email])
   @@map("user")
@@ -75,4 +82,152 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+enum ListStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+model List {
+  id              String     @id @default(cuid())
+  title           String
+  status          ListStatus @default(ACTIVE)
+  currency        String     @default("RSD")
+  country         String     @default("RS")
+  createdByUserId String
+
+  createdByUser User         @relation(fields: [createdByUserId], references: [id])
+  members       ListMember[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  completedAt   DateTime?
+  listInvites   ListInvite[]
+  listItems     ListItem[]
+  itemEvents    ItemEvent[]
+
+  @@index([createdByUserId, createdAt])
+  @@index([status, updatedAt])
+  @@index([country])
+}
+
+enum ListMemberRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+model ListMember {
+  id              String         @id @default(cuid())
+  listId          String
+  list            List           @relation(fields: [listId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role            ListMemberRole @default(VIEWER)
+  joinedAt        DateTime       @default(now())
+  invitedByUserId String?
+  invitedByUser   User?          @relation("Inviter", fields: [invitedByUserId], references: [id])
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@unique([listId, userId])
+  @@index([userId])
+  @@index([listId])
+}
+
+model ListInvite {
+  id              String         @id @default(cuid())
+  listId          String
+  list            List           @relation(fields: [listId], references: [id], onDelete: Cascade)
+  tokenHash       String
+  roleGranted     ListMemberRole
+  createdByUserId String
+  createdByUser   User           @relation(fields: [createdByUserId], references: [id])
+  expiresAt       DateTime?
+  maxUses         Int?
+  uses            Int            @default(0)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@unique([tokenHash])
+  @@index([listId])
+  @@index([expiresAt])
+}
+
+enum ListItemUnit {
+  PCS
+  KG
+  L
+  ML
+  G
+  MG
+}
+
+enum ListItemStatus {
+  PENDING
+  BOUGHT
+  PARTIALLY_BOUGHT
+  UNAVAILABLE
+}
+
+model ListItem {
+  id                    String         @id @default(cuid())
+  listId                String
+  list                  List           @relation(fields: [listId], references: [id], onDelete: Cascade)
+  name                  String
+  nameNormalized        String
+  note                  String?
+  quantity              Int?
+  unit                  ListItemUnit?
+  status                ListItemStatus @default(PENDING)
+  sortOrder             Int?
+  expectedPriceAmount   Int?
+  expectedPriceCurrency String?
+
+  createdByUserId String?
+  createdByUser   User?   @relation("ListItemCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  updatedByUserId String?
+  updatedByUser   User?   @relation("ListItemUpdater", fields: [updatedByUserId], references: [id], onDelete: SetNull)
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  itemEvents ItemEvent[]
+
+  @@index([listId, status])
+  @@index([listId, updatedAt])
+  @@index([listId, nameNormalized])
+}
+
+enum ItemEventType {
+  ITEM_ADDED
+  ITEM_UPDATED
+  ITEM_STATUS_CHANGED
+  ITEM_PRICE_EXPECTED_SET
+  ITEM_PRICE_ACTUAL_SET
+  ITEM_REMOVED
+}
+
+model ItemEvent {
+  id String @id @default(cuid())
+
+  listId String
+  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  itemId String?
+  item   ListItem? @relation(fields: [itemId], references: [id], onDelete: SetNull)
+
+  type    ItemEventType
+  payload Json?
+
+  actorUserId String?
+  actorUser   User?   @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([listId, createdAt(desc)])
+  @@index([itemId, createdAt(desc)])
+  @@index([actorUserId, createdAt(desc)])
 }

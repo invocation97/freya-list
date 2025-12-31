@@ -37,3 +37,28 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model List
+ * 
+ */
+export type List = Prisma.ListModel
+/**
+ * Model ListMember
+ * 
+ */
+export type ListMember = Prisma.ListMemberModel
+/**
+ * Model ListInvite
+ * 
+ */
+export type ListInvite = Prisma.ListInviteModel
+/**
+ * Model ListItem
+ * 
+ */
+export type ListItem = Prisma.ListItemModel
+/**
+ * Model ItemEvent
+ * 
+ */
+export type ItemEvent = Prisma.ItemEventModel
