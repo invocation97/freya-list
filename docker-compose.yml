@@ -10,8 +10,17 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+
 volumes:
   db-data:
+  redis-data:
 
 # Connection string example:
 # postgres://freya:freya@localhost:5432/freya_list
