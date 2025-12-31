@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: freya
+      POSTGRES_PASSWORD: freya
+      POSTGRES_DB: freya_list
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+
+# Connection string example:
+# postgres://freya:freya@localhost:5432/freya_list
